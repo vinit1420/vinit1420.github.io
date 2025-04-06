@@ -3,18 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <title>Synchrony Datathon 2025</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #007acc;
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .file-link {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .file-link a {
+      text-decoration: none;
+      color: #007acc;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      padding: 2rem 1rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>🔍 Synchrony Illini Datathon 2025</h1>
-  <p>This project focuses on predicting Q4 2025 customer spending, segmenting accounts by creditworthiness, and recommending personalized credit line increases.</p>
 
-  <h2>Project Files</h2>
-  <ul>
-    <li><a href="Final_Solution_Datathon.html">📓 View Notebook in Browser</a></li>
-    <li><a href="Illini_Datathon_Conquistadors.pdf">📄 Presentation PDF</a></li>
-    <li><a href="README.html">📘 Project README</a></li>
-  </ul>
+  <header>
+    <h1>🔍 Synchrony Datathon 2025</h1>
+    <p>Credit Risk Prediction · Customer Segmentation · Personalized Line Increases</p>
+  </header>
 
-  <p><a href="../index.html">⬅️ Back to Home</a></p>
+  <div class="container">
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Our project for Synchrony’s 2025 Illini Datathon tackled three key problems:
+      </p>
+      <ul>
+        <li>📈 Forecast Q4 2025 customer spending</li>
+        <li>🧠 Segment accounts by credit risk and eligibility</li>
+        <li>💳 Recommend personalized credit line increases</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Project Files</h2>
+
+      <div class="file-link">
+        <a href="Final_Solution_Datathon.html" target="_blank">📓 View Solution Notebook</a>
+        <p>Our full ML pipeline including preprocessing, feature engineering, and model building.</p>
+      </div>
+
+      <div class="file-link">
+        <a href="Illini Datathon Conquistadors.pdf" target="_blank">📄 Presentation Slides (PDF)</a>
+        <p>Visual summary of approach, key insights, and business impact.</p>
+      </div>
+
+      <div class="file-link">
+        <a href="README.html" target="_blank">📘 Read the Project Overview</a>
+        <p>Details about dataset, cleaning, modeling logic, and evaluation strategy.</p>
+      </div>
+
+    </section>
+
+    <section>
+      <a href="../index.html" class="back-link">⬅️ Back to Home</a>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 Vinit · Team Conquistadors · Built with ❤️
+  </footer>
+
 </body>
 </html>
