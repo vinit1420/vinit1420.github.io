@@ -2,15 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Vinit's Portfolio</title>
+  <title>Vinit | Portfolio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .project-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .project-card h3 {
+      margin-top: 0;
+    }
+    .project-card a {
+      text-decoration: none;
+      color: #007acc;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      padding: 2rem 1rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My Website</h1>
-  <p>This is my portfolio for projects like the Synchrony Datathon!</p>
 
-  <h2>Projects</h2>
-  <ul>
-    <li><a href="synchrony-datathon/index.html">🔍 Synchrony Datathon 2025</a></li>
-  </ul>
+  <header>
+    <h1>Hi, I'm Vinit</h1>
+    <p>Master's student in Information Management | Passionate about data, tech, and storytelling</p>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2>About Me</h2>
+      <p>
+        I’m currently pursuing my Master’s in Information Management at UIUC. I love solving real-world problems using data, building smart systems, and creating impactful solutions.
+      </p>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+
+      <div class="project-card">
+        <h3>🔍 Synchrony Datathon 2025</h3>
+        <p>Built a machine learning framework to forecast spending, segment customers by risk, and recommend personalized credit line increases.</p>
+        <a href="synchrony-datathon/">View Project ➜</a>
+      </div>
+
+      <!-- More project cards can be added here -->
+
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>📧 Email: vka5@illinois.edu</p>
+      <p>🔗 <a href="www.linkedin.com/in/vinit-agrharkar" target="_blank">LinkedIn Profile</a></p>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 Vinit. Built with ❤️ using GitHub Pages.
+  </footer>
+
 </body>
 </html>
