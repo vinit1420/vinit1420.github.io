@@ -1,0 +1,297 @@
+<html><body><h1>🔍 Synchrony Illini Datathon 2025</h1>
+
+<h2>👥 Team Conquistadors</h2>
+
+<p><strong>Members</strong>: Shobha, Vinit, Anushka and Sanjana</p>
+
+<hr />
+
+<h2>📌 Problem Overview</h2>
+
+<p>This project addresses Synchrony’s 2025 Datathon challenge focused on <strong>predicting Q4 2025 customer spending</strong>, <strong>segmenting accounts by creditworthiness and risk</strong>, and <strong>recommending personalized credit line increases</strong>.</p>
+
+<p>We used historical and last 8 months of transactional and behavioral account data, along with mapped metadata, to build:</p>
+
+<ol>
+<li>A <strong>regression model</strong> for spending prediction in Q4 of 2025  </li>
+<li>A <strong>classification model</strong> for customer account segmentation  </li>
+<li>A <strong>regression model</strong> to estimate credit line credit limit adjustments for eligible customers</li>
+</ol>
+
+<hr />
+
+<h2>📂 Project Structure</h2>
+
+<ul>
+<li><code>Final_Solution_Datathon.ipynb</code> – Jupyter notebook containing full code and pipeline</li>
+<li><code>Datathon Mapping document_V4.xlsx</code> – Feature-to-column mapping (used for feature understanding)</li>
+<li>CSV files (8 datasets) to be placed in the <code>root</code> folder</li>
+</ul>
+
+<hr />
+
+<h2>🛠️ Setup Instructions</h2>
+
+<h3>📁 Folder Structure</h3>
+
+<p>All input CSV files should be placed in <code>root</code> folder of your working directory.</p>
+
+<p><code>
+root/
+├── account_dim_20250325.csv
+├── fraud_claim_case_20250325.csv
+├── fraud_claim_tran_20250325.csv
+├── rams_batch_cur_20250325.csv
+├── rams_acct_hist_20250325.csv
+├── score_fact_20250325.csv
+├── statement_fact_20250325.csv
+├── tran_fact_20250325.csv
+├── Final_Solution_Datathon.ipynb
+├── README.md
+</code></p>
+
+<h3>🧪 Dependencies</h3>
+
+<p>Install the required libraries using pip:</p>
+
+<p><code>bash
+pip install pandas numpy scikit-learn xgboost imbalanced-learn matplotlib seaborn
+</code></p>
+
+<hr />
+
+<p>If you're a macOS user, then you might want to run the below code for being able to download <code>xgboost</code> package</p>
+
+<p><code>bash
+brew install libomp
+pip install pandas numpy scikit-learn xgboost imbalanced-learn matplotlib seaborn
+</code></p>
+
+<h2>▶️ How to Run</h2>
+
+<p>Open the notebook and run all cells:</p>
+
+<p><code>bash
+jupyter notebook Final_Solution_Datathon.ipynb
+</code></p>
+
+<h2>Import Libraries and Load the datasets</h2>
+
+<p>Import the necessary libraries/packages</p>
+
+<p><code>python
+import pandas as pd
+import numpy as np
+import seaborn as sns
+...
+</code></p>
+
+<hr />
+
+<p>The code will automatically read data from the <code>root</code> directory using:</p>
+
+<p><code>python
+pd.read_csv("account_dim_20250325.csv")
+</code></p>
+
+<hr />
+
+<h2>🧼 Data Cleaning, Feature Engineering &amp; Preparation</h2>
+
+<h3>1.  Data Cleaning</h3>
+
+<p>Each dataset was individually cleaned and merged to create our <code>master data</code> based on account IDs. Key cleaning steps included:</p>
+
+<ul>
+<li>Dropping columns with more than 70% null values</li>
+<li>Filling NA with zeros or domain-specific defaults</li>
+<li>Merging datasets using <code>cu_account_nbr</code>, <code>customer_account_nbr</code>, or <code>account_nbr_pty</code></li>
+<li>Dropping columns which had NaN values in their credit line amount</li>
+<li>Dropping <code>cu_cash_line_am</code> column as it's a subset of <code>cu_crd_line</code> column</li>
+<li>Shortlisting only 39 relevant columns from master data </li>
+<li>Dropped multiple entries for a single account number as we had historical data based on latest <code>cu_processing_date</code></li>
+<li>Visualizations to see correlations between selected columns/attributes</li>
+</ul>
+
+<hr />
+
+<h3>2.  Feature Engineering</h3>
+
+<p>Each dataset was individually cleaned and merged to create our <code>master data</code> based on account IDs. Key cleaning steps included:</p>
+
+<ul>
+<li>Creating new columns like <code>avg_spend_2023_Q2</code> with average quarterly spend from 2023's Q2 till 2025's Q1 from the <code>transaction_amt</code> and <code>transaction_date</code> columns</li>
+<li>Creating new columns like <code>avg_otb_2023_Q2</code> with average quarterly on the buy amounts from 2024's Q3 till 2025's Q1 from the <code>cu_otb</code> and <code>cu_processing_date</code> columns</li>
+<li>Creating new feature <code>total_net_fraud_amt</code> for an account from all the previous <code>net_fraud_amt</code></li>
+<li>Merged these newly created features with our master data</li>
+</ul>
+
+<hr />
+
+<h2>🏗️ Models Built</h2>
+
+<h3>🔹 Objective 1: Predict Q4 Spending</h3>
+
+<ul>
+<li><strong>Final Model</strong>: <code>GradientBoostingRegressor</code></li>
+<li><strong>Features</strong>: Quarterly spend and otb history from 2023 till 2025, credit utilization last 3 and 6 months, current balance and otb, months since credit line change, confidence level etc</li>
+<li><strong>Total No Features</strong>: 22</li>
+<li><strong>Implementation/Logic</strong>: Since actual Q4 2025 data is unavailable, we simulated the scenario by using Q4 2024 average spend as a proxy target for training and validation.</li>
+<li><strong>Results</strong>:
+<ul>
+<li><strong>R²</strong>: <code>0.9985</code></li>
+<li><strong>RMSE</strong>: <code>64.046</code></li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h3>🔹 Objective 2: Segment Customers by Creditworthiness</h3>
+
+<ul>
+<li><strong>Final Model</strong>: <code>XGBClassifier</code> + SMOTE</li>
+<li><strong>Features</strong>: Cash Balance PCT, Avg utlisation 3M and 6M, no of days delinquent, months since credit line change, non-sufficient funds last 12M, behaviour, bureau score, total fraud amount and confidence level</li>
+<li><strong>Total No Features</strong>: 18</li>
+<li><strong>Target Classes</strong>:
+<ul>
+<li><code>0</code>: No Increase</li>
+<li><code>1</code>: Eligible without Risk</li>
+<li><code>2</code>: Eligible with Risk</li>
+<li><code>3</code>: Non-performing that pose high risk</li>
+</ul></li>
+<li><strong>Features</strong>: Risk scores, utilization, delinquency, NSF count</li>
+<li><strong>Results</strong>:
+<ul>
+<li><strong>Accuracy</strong>: <code>88%</code></li>
+<li><strong>Weighted F1</strong>: <code>0.88</code></li>
+<li>Confusion matrix and report included in notebook</li>
+</ul></li>
+</ul>
+
+<h4>Segmentation Logic</h4>
+
+<p>To assign accounts to segments, we used a rule-based system that combines predicted spending with behavioral, credit, and fraud-related indicators.</p>
+
+<h5>Key Rules Used:</h5>
+
+<p><strong>Segment 3 – High Risk / Non-performing</strong><br />
+Account is flagged as high risk if <strong>any</strong> of the following apply:
+- <code>total_net_fraud_amt</code> &gt; 100<br />
+- <code>ca_nsf_count_lst_12_months</code> &gt; 3<br />
+- <code>cu_nbr_days_dlq</code> &gt; 60<br />
+- <code>cu_bhv_scr</code> &lt; 400<br />
+- <code>return_check_cnt_ytd</code> &gt; 3  </p>
+
+<p><strong>Segment 1 – Eligible without Risk</strong><br />
+Account qualifies if all of the following are true:
+- <code>predicted_avg_spend_2025_Q4</code> &gt; 300<br />
+- <code>ca_current_utilz</code> &gt; 0.5<br />
+- <code>cu_line_incr_excl_flag</code> == 0<br />
+- <strong>AND</strong> both:
+  - <code>cu_crd_bureau_scr</code> &gt; 600<br />
+  - <code>rb_new_bhv_scr</code> &gt; 550  </p>
+
+<p><strong>Segment 2 – Eligible with Risk</strong><br />
+Same as Segment 1 <strong>but does not meet</strong> the creditworthiness criteria above.</p>
+
+<p><strong>Segment 0 – No Increase</strong><br />
+Default group for all accounts not meeting high spending or utilization thresholds.</p>
+
+<p>This logic allows for clear separation of high-value, low-risk customers from high-risk or ineligible accounts.</p>
+
+<h4>🧪 Model Experimentation</h4>
+
+<p>To solve the segmentation task, we tested multiple classification models with and without class imbalance handling:</p>
+
+<ul>
+<li><code>RandomForestClassifier</code></li>
+<li><code>XGBClassifier</code></li>
+<li><code>RandomForestClassifier</code> + SMOTE</li>
+<li><code>XGBClassifier</code> + SMOTE</li>
+</ul>
+
+<p>After evaluating performance across all models, we selected <strong><code>XGBClassifier</code> + SMOTE</strong> as our final choice. This combination provided the best balance of <strong>accuracy</strong>, <strong>class-wise F1 scores</strong>, and <strong>generalization</strong> across imbalanced segments, especially the minority class (Segment 2).</p>
+
+<h4>🧪 Why SMOTE?</h4>
+
+<p>During our experiments, we observed that the dataset was highly imbalanced — especially for <strong>Segment 2 (Eligible with Risk)</strong>, which had very few samples compared to other classes. This imbalance caused standard classifiers to underperform on minority classes, resulting in low recall and F1 scores.</p>
+
+<p>To address this, we applied <strong>SMOTE (Synthetic Minority Over-sampling Technique)</strong> during training. SMOTE generates synthetic examples for underrepresented classes, helping the model better learn decision boundaries and improving performance on segments like Segment 2 without sacrificing overall accuracy.</p>
+
+<hr />
+
+<h3>🔹 Objective 3: Predict Individualized Credit Line Increases</h3>
+
+<p>To recommend personalized credit line increases, we built a regression-based framework that balances <strong>spending demand</strong>, <strong>utilization trends</strong>, and <strong>risk factors</strong>.</p>
+
+<p>This task was performed only on accounts in Segments 1 and 2 (i.e., "Eligible without Risk" and "Eligible with Risk").</p>
+
+<ul>
+<li><strong>Model</strong>: <code>RandomForestRegressor</code></li>
+<li><strong>Applied to</strong>: Accounts from segments 0 and 1 (eligible)</li>
+<li><strong>Features</strong>: Current credit line, utilization, spending, behavioral scores</li>
+<li><strong>Output</strong>: Personalized credit line increase per account</li>
+</ul>
+
+<h4>🧠 Step 1: Rule-Based Initial Recommendation Logic</h4>
+
+<p>Before training a regression model, we designed a <strong>business-rule-based function</strong> (<code>suggest_crd_line_increase</code>) to simulate human-like credit decisioning using financial indicators.</p>
+
+<p><strong>High Risk Check</strong> – Accounts were denied a credit line increase if <strong>any</strong> of the following risk triggers were true:
+- <code>total_net_fraud_amt</code> &gt; 100
+- More than 3 NSF incidents (<code>ca_nsf_count_lst_12_months</code>)
+- More than 2 returned checks YTD (<code>return_check_cnt_ytd</code>)
+- Days delinquent &gt; 45 or max delinquency in 6 months &gt; 30
+- Low behavioral or recent risk scores (&lt; 400)</p>
+
+<p><strong>Spending Demand Logic</strong> – For non-risky accounts:
+- A <strong>spend-to-limit ratio</strong> (<code>predicted_avg_spend_2025_Q4 / current credit line</code>) was calculated.
+- Based on this ratio and utilization, increase amounts were suggested:
+  - If spend ratio &gt; 1.2 and utilization &gt; 60% → <strong>30%</strong> credit line increase
+  - If spend ratio &gt; 1.0 → <strong>20%</strong> increase
+  - If spend ratio &gt; 0.8 → <strong>10%</strong> increase
+  - Otherwise → <strong>No increase</strong></p>
+
+<p>This logic generated a proxy target (<code>crd_line_increase_amt</code>) to use for regression modeling.</p>
+
+<h4>🧪 Step 2: Model Training and Evaluation</h4>
+
+<p>We trained regression models to predict the credit line increase amount directly based on the engineered target.</p>
+
+<p><strong>Features Used</strong>:
+- Predicted Q4 spend (<code>predicted_avg_spend_2025_Q4</code>)
+- Credit utilization (3M, 6M, current)
+- Risk and delinquency signals (<code>cu_bhv_scr</code>, <code>rb_new_bhv_scr</code>, <code>cu_nbr_days_dlq</code>)
+- Historical spend and fraud markers
+- Available credit and current balance</p>
+
+<p><strong>Models Tried</strong>:
+- <code>GradientBoostingRegressor</code>
+- <code>XGBRegressor</code>
+-  <code>RandomForestRegressor</code> (Best)</p>
+
+<p><strong>Performance Metric</strong>:
+- <strong>Mean Absolute Error (MAE)</strong> on validation set</p>
+
+<p><strong>Results</strong>:</p>
+
+<p>| Model                    | MAE (Validation) |
+|--------------------------|------------------|
+| Gradient Boosting        | <em>4.2972</em>         |
+| XGBoost Regressor        | <em>4.3177</em>         |
+| ✅ RandomForest Regressor | <strong>3.3759</strong> ✅     |</p>
+
+<h4>✅ Final Output</h4>
+
+<p>The best model (<code>RandomForestRegressor</code>) was used to generate <code>predicted_crd_line_increase_amt</code> for all accounts in the eligible segments. The model was off by just $3.3759 on an average.</p>
+
+<p>This approach allowed us to recommend <strong>data-backed, risk-aware credit line increases</strong> tailored to each customer's financial profile.</p>
+
+<hr />
+
+<h2>📺 Video Demo</h2>
+
+<p>📽️ [Insert Unlisted YouTube Link Here Before Submission]</p>
+
+<hr />
+</body></html>
